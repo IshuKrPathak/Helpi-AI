@@ -9,7 +9,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
       </div>
       <main className=" md:pl-72">
        <Navbar/>
-        hello content 
+       
         {children}
       </main>
     </div>
