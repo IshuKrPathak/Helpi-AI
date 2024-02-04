@@ -32,15 +32,12 @@ const Conversation = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: ChatCompletionRequestMessage = {
-        role: "user",
-        content: values.prompt,
-      };
-      const newMessage = [...messages, userMessage];
-      const response = await axios.post("/api/conversation", {
-        messages: newMessage,
-      });
-      setMessages((current) => [...current, userMessage, response.data]);
+      setMusic(undefined)
+
+     
+      const response = await axios.post("/api/music",values);
+      setMusic(response.data.audio)
+      
       form.reset();
     } catch (error: any) {
       // open throw model
@@ -98,12 +95,14 @@ const Conversation = () => {
               <Loader />
             </div>
           )}
-          {messages.length === 0 && !isLoading && (
+          {!music && !isLoading && (
             <Empty label="No Music Generated at all." />
           )}
-          <div>
-            music will be generated
-          </div>
+          {music && (
+            <audio controls className=" w-full mt-8">
+              <source src={music}/>
+              </audio>
+          )}
         
         </div>
       </div>
