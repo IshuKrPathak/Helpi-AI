@@ -3,7 +3,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 
 import Heading from "@/components/heading";
-import { Music } from "lucide-react";
+import { VideoIcon } from "lucide-react";
 import { formSchema } from "./constants";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,15 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import axios from "axios";
-import { ChatCompletionRequestMessage } from "openai";
 import { Empty } from "@/components/empty";
 import Loader from "@/components/loader";
 import { cn } from "@/lib/utils";
 
-
-const MusicPage = () => {
+const VideoPage = () => {
   const router = useRouter();
-  const [music, setMusic] = useState<string>();
+  const [video, setVideo] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,12 +30,11 @@ const MusicPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setMusic(undefined)
+      setVideo(undefined);
 
-     
-      const response = await axios.post("/api/music",values);
-      setMusic(response.data.audio)
-      
+      const response = await axios.post("/api/video", values);
+      setVideo(response.data[0]);
+
       form.reset();
     } catch (error: any) {
       // open throw model
@@ -51,11 +48,11 @@ const MusicPage = () => {
     <div>
       {/* title */}
       <Heading
-        title="Music Generation"
-        description="Our most advanced Muisc Generation model."
-        icon={Music}
-        iconColor="text-emerald-700"
-        bgColor="bg-emerald-700/20"
+        title="Video Generation"
+        description="Our most advanced Video Generation model."
+        icon={VideoIcon}
+        iconColor="text-orange-700"
+        bgColor="bg-orange-700/20"
       />
       <div className=" px-4 lg:px-8">
         <div>
@@ -72,7 +69,7 @@ const MusicPage = () => {
                       <Input
                         className=" border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="Generate song from Tabla"
+                        placeholder="Birds around a cloud. "
                         {...field}
                       />
                     </FormControl>
@@ -95,17 +92,18 @@ const MusicPage = () => {
               <Loader />
             </div>
           )}
-          {!music && !isLoading && (
-            <Empty label="No Music Generated at all." />
-          )}
-          {music && (
-            <audio controls className=" w-full mt-8">
-              <source src={music}/>
-              </audio>
+          {!video && !isLoading && <Empty label="No Video Generated at all." />}
+          {video && (
+            <video
+              className=" w-full aspect-video mt-8 rounded-lg border bg-black"
+              controls
+            >
+              <source src={video} />
+            </video>
           )}
         </div>
       </div>
     </div>
   );
 };
-export default MusicPage;
+export default VideoPage;
