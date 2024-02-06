@@ -114,10 +114,7 @@ const Conversation = () => {
                 )}
               >
                 {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                <p className=" text-sm">
-                {message.content}
-                </p>
-             
+                <p className=" text-sm">{message.content}</p>
               </div>
             ))}
           </div>
