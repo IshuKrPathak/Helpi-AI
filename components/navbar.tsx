@@ -1,9 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import MobileSidebar from "./mobile-sidebar";
-// import { getApiLimitCount } from "@/lib/api-limit";
 
-const Navbar = async () => {
-  // const apiLimitCount = await getApiLimitCount();
+const Navbar = () => {
   return (
     <div className=" flex items-center p-4">
       {/* <MobileSidebar apiLimitCount={apiLimitCount} /> */}

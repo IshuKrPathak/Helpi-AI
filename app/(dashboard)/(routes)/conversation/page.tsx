@@ -47,12 +47,8 @@ const Conversation = () => {
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
     } catch (error: any) {
-      if (error?.response?.status === 403) {
-        proModal.onOpen();
-      }
-      // } else {
-      //   toast.error("Something went wrong");
-      // }
+      // open throw model
+      console.log(error);
     } finally {
       router.refresh();
     }
