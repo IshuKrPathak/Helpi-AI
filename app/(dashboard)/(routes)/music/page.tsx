@@ -16,10 +16,12 @@ import { ChatCompletionRequestMessage } from "openai";
 import { Empty } from "@/components/empty";
 import Loader from "@/components/loader";
 import { cn } from "@/lib/utils";
-
+import { useProModal } from "@/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const MusicPage = () => {
   const router = useRouter();
+  const proModal = useProModal();
   const [music, setMusic] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,16 +34,18 @@ const MusicPage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      setMusic(undefined)
+      setMusic(undefined);
 
-     
-      const response = await axios.post("/api/music",values);
-      setMusic(response.data.audio)
-      
+      const response = await axios.post("/api/music", values);
+      setMusic(response.data.audio);
+
       form.reset();
     } catch (error: any) {
-      // open throw model
-      console.log(error);
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error("Something went wrong");
+      }
     } finally {
       router.refresh();
     }
@@ -95,13 +99,11 @@ const MusicPage = () => {
               <Loader />
             </div>
           )}
-          {!music && !isLoading && (
-            <Empty label="No Music Generated at all." />
-          )}
+          {!music && !isLoading && <Empty label="No Music Generated at all." />}
           {music && (
             <audio controls className=" w-full mt-8">
-              <source src={music}/>
-              </audio>
+              <source src={music} />
+            </audio>
           )}
         </div>
       </div>

@@ -24,9 +24,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardFooter } from "@/components/ui/card";
+import { useProModal } from "@/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const ImagePage = () => {
   const router = useRouter();
+  const proModal = useProModal();
   const [images, setImages] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,8 +52,12 @@ const ImagePage = () => {
       setImages(urls);
       form.reset();
     } catch (error: any) {
-      // open throw model
-      console.log(error);
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     } finally {
       router.refresh();
     }

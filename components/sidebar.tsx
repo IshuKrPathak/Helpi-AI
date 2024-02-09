@@ -64,7 +64,7 @@ const routes = [
   {
     label: "Settings",
     icon: Settings,
-    href: "/settings",
+    href: "/setti",
     color: "text-green-500",
   },
 ];

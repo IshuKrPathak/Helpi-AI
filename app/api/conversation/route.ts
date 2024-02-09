@@ -33,11 +33,11 @@ export async function POST(req: Request) {
       messages,
     });
 
-    await increaseApiLimit();
+    
 
     return NextResponse.json(response.data.choices[0].message);
   } catch (error) {
-    console.log("[CONVERSATION ERROR]", error);
+    console.log("[CONVERSATION EROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
